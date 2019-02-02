@@ -1,12 +1,40 @@
-name := """epi"""
+import Dependencies._
 
-version := "1.0.0-SNAPSHOT"
-
-scalaVersion := "2.12.6"
-
-libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test",
-  "org.scalactic" %% "scalactic" % "3.0.5"
+// A good example of build.sbt https://github.com/lift/framework/blob/master/build.sbt
+inThisBuild(
+  Seq(
+    organization := "org.asarkar",
+    version := "1.0.0",
+    scalaVersion := "2.12.7",
+    scalacOptions ++= Seq(
+      "-unchecked",
+      "-feature",
+      //  "-language:existentials",
+      "-language:higherKinds",
+      "-language:implicitConversions",
+      //  "-language:postfixOps",
+      "-deprecation",
+      "-encoding",
+      "utf8"
+    ),
+    libraryDependencies ++= allDeps
+  )
+    ++ inConfig(Test)(Seq(
+    testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-o", "-e"),
+    logBuffered := false,
+    fork := true,
+    parallelExecution := false,
+    javaOptions ++= Seq("-ea")
+  ))
 )
-Test / testOptions += Tests.Argument(TestFrameworks.ScalaTest, "-o", "-e")
-scalacOptions ++= Seq("unchecked", "deprecation")
+
+// http://www.wartremover.org/doc/warts.html
+Compile / wartremoverWarnings ++= Warts.unsafe
+  .filterNot(Set(Wart.NonUnitStatements).contains)
+
+lazy val `epi` = (project in file("."))
+  .aggregate(
+    `test-util`
+  )
+
+lazy val `test-util` = project
