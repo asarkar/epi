@@ -140,23 +140,67 @@ package object arrays {
 
   /*
    * 5.19 Rotate a 2D array
-   * https://stackoverflow.com/a/35438327/839733
+   *
+   * ANSWER: https://stackoverflow.com/a/35438327/839733
+   * A 5x5 matrix has three layers in total and two layers that need rotating:
+   * . . . . .
+   * . x x x .
+   * . x O x .
+   * . x x x .
+   * . . . . .
+   *
+   * +-----+--------+------------------+---------+
+   * | N×N | Layers | Rotatable Layers |   N/2   |
+   * +-----+--------+------------------+---------+
+   * | 1×1 |      1 |                0 | 1/2 = 0 |
+   * | 2×2 |      1 |                1 | 2/2 = 1 |
+   * | 3×3 |      2 |                1 | 3/2 = 1 |
+   * | 4×4 |      2 |                2 | 4/2 = 2 |
+   * | 5×5 |      3 |                2 | 5/2 = 2 |
+   * | 6×6 |      3 |                3 | 6/2 = 3 |
+   * | 7×7 |      4 |                3 | 7/2 = 3 |
+   * +-----+--------+------------------+---------+
+   *
+   * 5x5
+   * +-----------+---------+---------+---------+
+   * |   Layer   |  Rows   | Columns | Rotate? |
+   * +-----------+---------+---------+---------+
+   * | Outermost | 0 and 4 | 0 and 4 | Yes     |
+   * | Inner     | 1 and 3 | 1 and 3 | Yes     |
+   * | Innermost | 2       | 2       | No      |
+   * +-----------+---------+---------+---------+
+   *
+   * Elements in a layer only move within the same layer.
+   * In the beginning, top is the top left element, and at each iteration, it is the element to the right of the last
+   * top.
+   * In the beginning, right is the top right element, and at each iteration, it is the element below the last right.
+   * In the beginning, bottom is the bottom right element, and at each iteration, it is the element to the left of the
+   * last bottom.
+   * In the beginning, left is the bottom left element, and at each iteration, it is the element top of the last left.
+   *
+   * At each iteration, the following moves happen:
+   * top -> right
+   * right -> bottom
+   * bottom -> left
+   * left -> top
+   *
+   * Also see 2D Rotation.pdf.
    */
   def rotate2D(a: Array[Array[Int]]): Unit = {
     val n = a.length - 1
     val numLayers = a.length / 2
 
-    for (row <- 0 until numLayers) {
-      for (col <- row until (n - row)) {
-        val temp1 = a(n - col)(row)
-        val temp2 = a(n - row)(n - col)
-        val temp3 = a(col)(n - row)
-        val temp4 = a(row)(col)
+    for (layer <- 0 until numLayers) {
+      for (i <- layer until (n - layer)) {
+        val left = a(n - i)(layer)
+        val bottom = a(n - layer)(n - i)
+        val right = a(i)(n - layer)
+        val top = a(layer)(i)
 
-        a(row)(col) = temp1
-        a(n - col)(row) = temp2
-        a(n - row)(n - col) = temp3
-        a(col)(n - row) = temp4
+        a(layer)(i) = left
+        a(n - i)(layer) = bottom
+        a(n - layer)(n - i) = right
+        a(i)(n - layer) = top
       }
     }
   }

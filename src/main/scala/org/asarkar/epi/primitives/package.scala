@@ -64,6 +64,24 @@ package object primitives {
   }
 
   /*
+   * 4.7 Compute x^y
+   *
+   * ANSWER: We divide-and-conquer by halving n each time. We also allow negative exponents. Since there is one
+   * recursive call at each iteration, and other than that, work done is constant, time complexity is O(log(n)).
+   */
+  def pow(x: Double, n: Int): Double = {
+    if (n == 0) 1d
+    else {
+      val y = math.abs(n)
+      val a = pow(x, y / 2)
+      val b = a * a * (if (y % 2 == 0) 1 else x)
+
+      if (n > 0) b
+      else 1d / b
+    }
+  }
+
+  /*
    * 4.8 Reverse digits
    */
   def reverse(x: Long): Long = {

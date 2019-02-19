@@ -2,8 +2,8 @@ package org.asarkar.epi
 
 package object lists {
   /*
-   * 7.1 Merge two sorted lists
-   */
+     * 7.1 Merge two sorted lists
+     */
   def merge[A](xs: LinkedList[A], ys: LinkedList[A])(implicit ord: Ordering[A]): LinkedList[A] = {
     import ord.mkOrderingOps
 
@@ -55,7 +55,7 @@ package object lists {
   /*
    * 7.2 Reverse a single sublist
    */
-  def reverse[T](xs: ListNode[T], start: Int, finish: Int): ListNode[T] = {
+  def reverseSublist[T](xs: ListNode[T], start: Int, finish: Int): ListNode[T] = {
     require(start >= 1, "start must be positive")
     require(finish > start, "finish must be greater than start")
 

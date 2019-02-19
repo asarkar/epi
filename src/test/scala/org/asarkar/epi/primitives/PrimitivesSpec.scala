@@ -73,4 +73,18 @@ class PrimitivesSpec extends FlatSpec with TableDrivenPropertyChecks {
     r.value.width shouldBe 2
     r.value.height shouldBe 3
   }
+
+  it should "compute x raised to n" in {
+    val data = Table(
+      ("x", "n", "result"),
+      (3d, 2, 9d),
+      (3d, -2, 1d / 9),
+      (2d, 0, 1d),
+      (2d, 1, 2d)
+    )
+
+    forAll(data) { (x, n, result) =>
+      pow(x, n) shouldBe (result +- 0.01d)
+    }
+  }
 }

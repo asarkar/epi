@@ -1,5 +1,8 @@
 package org.asarkar.epi
 
+import java.awt.geom.Point2D
+
+import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 package object heaps {
@@ -66,6 +69,36 @@ package object heaps {
         (x.head, x.last)
       }
       // resolve fully, iterator can't be reused
+      .toList
+  }
+
+  /*
+   * 10.4 Compute the k closest stars
+   *
+   * ANSWER: We keep a max heap of size k + 1, and whenever the heap size exceeds k, we remove the top element (max).
+   * This way, we can handle an unlimited number of input elements because we only need O(k) space for the heap.
+   * Time taken is O(n) for iteration + O(n log(k)) for insertion in the heap.
+   */
+  def kClosest(points: Seq[(Int, Int)], k: Int): Seq[(Int, Int)] = {
+    val origin = new Point2D.Double(0, 0)
+    val ord = Ordering.by[Point2D, Double](_.distanceSq(origin)).reverse
+    val maxHeap = new java.util.PriorityQueue[Point2D.Double](k + 1, ord)
+
+    points
+      .map(p => new Point2D.Double(p._1, p._2))
+      .foreach { p =>
+        maxHeap.offer(p)
+        if (maxHeap.size > k) {
+          maxHeap.poll()
+        }
+      }
+
+    assert(maxHeap.size == k, s"Min heap size: ${maxHeap.size} is not equal to: $k")
+
+    maxHeap
+      .iterator
+      .asScala
+      .map(p => (p.getX.intValue, p.getY.intValue))
       .toList
   }
 }

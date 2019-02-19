@@ -70,7 +70,7 @@ package object bintree {
             .map(_ => node.datum)
           // not found on the left
           case None => node.right.flatMap(lca)
-          // found lca on the left
+          // not one of the two values, must have found the lca on the left
           case x@_ => x
         }
       }

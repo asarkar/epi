@@ -33,11 +33,11 @@ class ListsSpec extends FlatSpec {
   it should "reverse a sublist" in {
     val xs1 = ListNode(11, 3, 5, 7, 2)
 
-    reverse(xs1, 2, 4).toSeq should contain inOrderOnly(11, 7, 5, 3, 2)
+    reverseSublist(xs1, 2, 4).toSeq should contain inOrderOnly(11, 7, 5, 3, 2)
 
     val xs2 = ListNode(11, 3, 5, 7, 2)
 
-    reverse(xs2, 1, 10).toSeq should contain inOrderOnly(2, 7, 5, 3, 11)
+    reverseSublist(xs2, 1, 10).toSeq should contain inOrderOnly(2, 7, 5, 3, 11)
   }
 
   it should "detect cycle" in {
