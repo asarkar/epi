@@ -152,6 +152,16 @@ package object lists {
 
   /*
    * 7.4 Test for overlapping lists - cycle-free
+   *
+   * ANSWER: The lists overlap if they have the same tail node; once the lists converge at a node, they can't diverge
+   * later at a different node.
+   * To find the first overlapping node, we compute the lengths of the two lists. The first overlapping node is found
+   * bny advancing through the longer list by the difference in lengths, and then advancing through both lists in
+   * tandem, stopping at the first common node. If we reach the end of a list without finding a common node, the lists
+   * do not overlap.
+   *
+   * Example: A = 2 -> 3 -> 7 -> 8 -> 10 and B = 99 -> 1 -> 8 -> 10. A.length = 5, B.length = 4.
+   * We first advance to node = 3 on A, and then advance through both lists simultaneously, until we reach node = 8.
    */
   def overlapNoCycle[T](xs: ListNode[T], ys: ListNode[T]): Option[ListNode[T]] = {
     val size1 = xs.size
