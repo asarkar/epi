@@ -5,6 +5,50 @@ import scala.collection.mutable
 /*
  * 8.1 Implement a stack with max API
  *
+ * ANSWER: In order to avoid scanning the whole stack for the max value whenever we pop an element, we maintain an
+ * auxiliary stack where the entries are tuples of the form (current max value, number of instances). We could also
+ * repeat the max element, but keeping track of the number of instances saves space if there are many duplicates.
+ *
+ * When we push an element e, we check if it's greater than the top element of the aux stack. If yes, we push (e, 1)
+ * to the aux stack. If e is equal to the top element of the aux stack, we increment its count.
+ *
+ * When we pop an element, we check if it's equal to the top element of the aux stack. If yes, we decrement its count.
+ * If the count becomes zero, we remove the entry.
+ *
+ * Time Complexity: O(1), Space complexity: O(n).
+ *
+ * +-----------+-----------------+---------------------+-----+
+ * | Operation | Stack           | Auxiliary Stack     | Max |
+ * +-----------+-----------------+---------------------+-----+
+ * | -         | {}              | {}                  | -   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 2    | {2}             | {(2,1)}             | 2   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 2    | {2,2}           | {(2,2)}             | 2   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 1    | {1,2,2}         | {(2,2)}             | 2   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 4    | {4,1,2,2}       | {(4,1),(2,2)}       | 4   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 5    | {5,4,1,2,2}     | {(5,1),(4,1),(2,2)} | 5   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 5    | {5,5,4,1,2,2}   | {(5,2),(4,1),(2,2)} | 5   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 3    | {3,5,5,4,1,2,2} | {(5,2),(4,1),(2,2)  | 5   |
+ * +-----------+-----------------+---------------------+-----+
+ * | pop       | {5,5,4,1,2,2}   | {(5,2),(4,1),(2,2)} | 5   |
+ * +-----------+-----------------+---------------------+-----+
+ * | pop       | {5,4,1,2,2}     | {(5,1),(4,1),(2,2)} | 5   |
+ * +-----------+-----------------+---------------------+-----+
+ * | pop       | {4,1,2,2}       | {(4,1),(2,2)}       | 4   |
+ * +-----------+-----------------+---------------------+-----+
+ * | pop       | {1,2,2}         | {(2,2)}             | 2   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 0    | {0,1,2,2}       | {(2,2)}             | 2   |
+ * +-----------+-----------------+---------------------+-----+
+ * | push 3    | {3,0,1,2,2}     | {(3,1),(2,2)}       | 3   |
+ * +-----------+-----------------+---------------------+-----+
+ *
  * https://stackoverflow.com/a/5753935/839733
  *
  * ListBuffer internally uses Nil and :: to build an immutable List and allows constant-time removal of the

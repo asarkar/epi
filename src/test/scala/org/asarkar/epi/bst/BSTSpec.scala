@@ -32,5 +32,13 @@ class BSTSpec extends FlatSpec {
     `314`.right = Some(`6right`)
 
     isBST(`314`) shouldBe false
+
+    val ten = new BinaryTreeNode[Int](10)
+    val thirty = new BinaryTreeNode[Int](30)
+    val fifteen = new BinaryTreeNode[Int](314, Some(ten), Some(thirty))
+    val forty = new BinaryTreeNode[Int](40)
+    val twenty = new BinaryTreeNode[Int](20, Some(fifteen), Some(forty))
+
+    isBST(twenty) shouldBe false
   }
 }

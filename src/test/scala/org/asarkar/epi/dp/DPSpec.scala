@@ -8,7 +8,9 @@ class DPSpec extends FlatSpec with TableDrivenPropertyChecks {
   "dp" should "compute the max sum over all subarrays" in {
     Seq(
       1479 -> IndexedSeq(904, 40, 523, 12, -335, -385, -124, 481, -31),
-      3 -> IndexedSeq(1, -3, 2, 1, -1)
+      3 -> IndexedSeq(1, -3, 2, 1, -1),
+      137 -> IndexedSeq(34, -50, 42, 14, -5, 86),
+      0 -> IndexedSeq(-5, -1, -8, -9)
     )
       .foreach(x => maxSumSubarray(x._2) shouldBe x._1)
   }

@@ -17,6 +17,8 @@ package object dp {
    * However, since each value of M[i] is only computed once, because this algorithm doesn't exhibit
    * overlapping subproblems (recomputing the same values over and over). Thus, it may not be called
    * DP.
+   *
+   * If the array contains only negative numbers, the maximum sum would be zero, since we would not take any elements.
    */
   def maxSumSubarray(xs: IndexedSeq[Int]): Int = {
     // stores the maximum sum of the subarray ending at index i
@@ -26,7 +28,7 @@ package object dp {
     xs
       .tail
       .zipWithIndex
-      .foldLeft(Integer.MIN_VALUE) { case (max, (x, i)) =>
+      .foldLeft(0) { case (max, (x, i)) =>
         dp(i + 1) = math.max(dp(i) + x, x)
         math.max(max, dp(i + 1))
       }
