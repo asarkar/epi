@@ -21,17 +21,20 @@ package object dp {
    * If the array contains only negative numbers, the maximum sum would be zero, since we would not take any elements.
    */
   def maxSumSubarray(xs: IndexedSeq[Int]): Int = {
-    // stores the maximum sum of the subarray ending at index i
-    val dp = Array.ofDim[Int](xs.size)
-    dp(0) = xs.head
+    if (xs.isEmpty) 0
+    else {
+      // stores the maximum sum of the subarray ending at index i
+      val dp = Array.ofDim[Int](xs.size)
+      dp(0) = xs.head
 
-    xs
-      .tail
-      .zipWithIndex
-      .foldLeft(0) { case (max, (x, i)) =>
-        dp(i + 1) = math.max(dp(i) + x, x)
-        math.max(max, dp(i + 1))
-      }
+      xs
+        .tail
+        .zipWithIndex
+        .foldLeft(math.max(xs.head, 0)) { case (max, (x, i)) =>
+          dp(i + 1) = math.max(dp(i) + x, x)
+          math.max(max, dp(i + 1))
+        }
+    }
   }
 
   /*
